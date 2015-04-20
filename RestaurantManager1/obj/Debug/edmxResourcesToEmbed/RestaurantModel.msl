@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="RestaurantModelStoreContainer" CdmEntityContainer="RestaurantContext">
+    <EntitySetMapping Name="DiningTables">
+      <EntityTypeMapping TypeName="RestaurantModel.DiningTable">
+        <MappingFragment StoreEntitySet="DiningTables">
+          <ScalarProperty Name="Reserved" ColumnName="Reserved" />
+          <ScalarProperty Name="TableNo" ColumnName="TableNo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Dishs">
+      <EntityTypeMapping TypeName="RestaurantModel.Dish">
+        <MappingFragment StoreEntitySet="Dishs">
+          <ScalarProperty Name="DishId" ColumnName="DishId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Orders">
+      <EntityTypeMapping TypeName="RestaurantModel.Order">
+        <MappingFragment StoreEntitySet="Orders">
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="TableNo" ColumnName="TableNo" />
+          <ScalarProperty Name="DishId" ColumnName="DishId" />
+          <ScalarProperty Name="ReversedTime" ColumnName="ReversedTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

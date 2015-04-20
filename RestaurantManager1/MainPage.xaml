@@ -1,0 +1,44 @@
+﻿<Page x:Class="RestaurantManager1.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="470" d:DesignWidth="960"
+	Title="Main Page" Background="White">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
+            <Button x:Name="addOrderPage" 
+                    Content="Add Order Page" 
+                    Height="50"
+                    Width="200"
+                    Margin="10"
+                    FontSize="18"
+                    Click="addOrderPage_Click" />
+
+            <Button x:Name="finishOrderPage"
+                    Content="Finish Order Page"
+                    Height="50"
+                    Width="200"
+                    FontSize="18"
+                    Margin="10" 
+                    Click="finishOrderPage_Click" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Button x:Name="aboutButton"
+                    Content="About" 
+                    Height="30"
+                    Width="50"
+                    Margin="10"
+                    Click="aboutButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Page>

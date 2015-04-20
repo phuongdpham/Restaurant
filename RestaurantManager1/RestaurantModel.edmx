@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="RestaurantModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DiningTables">
+          <Key>
+            <PropertyRef Name="TableNo" />
+          </Key>
+          <Property Name="TableNo" Type="int" Nullable="false" />
+          <Property Name="Reserved" Type="char" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="Dishs">
+          <Key>
+            <PropertyRef Name="DishId" />
+          </Key>
+          <Property Name="DishId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Price" Type="int" Nullable="false" />
+          <Property Name="Status" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="TableNo" />
+            <PropertyRef Name="DishId" />
+            <PropertyRef Name="ReversedTime" />
+          </Key>
+          <Property Name="TableNo" Type="int" Nullable="false" />
+          <Property Name="DishId" Type="int" Nullable="false" />
+          <Property Name="ReversedTime" Type="datetime" Nullable="false" />
+          <Property Name="Quantity" Type="int" />
+        </EntityType>
+        <Association Name="FK_Orders_DiningTables">
+          <End Role="DiningTables" Type="Self.DiningTables" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DiningTables">
+              <PropertyRef Name="TableNo" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="TableNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Dishs">
+          <End Role="Dishs" Type="Self.Dishs" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dishs">
+              <PropertyRef Name="DishId" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="DishId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RestaurantModelStoreContainer">
+          <EntitySet Name="DiningTables" EntityType="Self.DiningTables" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Dishs" EntityType="Self.Dishs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Orders_DiningTables" Association="Self.FK_Orders_DiningTables">
+            <End Role="DiningTables" EntitySet="DiningTables" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Dishs" Association="Self.FK_Orders_Dishs">
+            <End Role="Dishs" EntitySet="Dishs" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RestaurantModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="DiningTable">
+          <Key>
+            <PropertyRef Name="TableNo" />
+          </Key>
+          <Property Name="TableNo" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_DiningTables" FromRole="DiningTables" ToRole="Orders" />
+          <Property Name="Reserved" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Dish">
+          <Key>
+            <PropertyRef Name="DishId" />
+          </Key>
+          <Property Name="DishId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Price" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Byte" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Dishs" FromRole="Dishs" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="TableNo" />
+            <PropertyRef Name="DishId" />
+            <PropertyRef Name="ReversedTime" />
+          </Key>
+          <Property Name="TableNo" Type="Int32" Nullable="false" />
+          <Property Name="DishId" Type="Int32" Nullable="false" />
+          <Property Name="ReversedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="DiningTable" Relationship="Self.FK_Orders_DiningTables" FromRole="Orders" ToRole="DiningTables" />
+          <NavigationProperty Name="Dish" Relationship="Self.FK_Orders_Dishs" FromRole="Orders" ToRole="Dishs" />
+          <Property Name="Quantity" Type="Int32" />
+        </EntityType>
+        <Association Name="FK_Orders_DiningTables">
+          <End Role="DiningTables" Type="Self.DiningTable" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DiningTables">
+              <PropertyRef Name="TableNo" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="TableNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Dishs">
+          <End Role="Dishs" Type="Self.Dish" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dishs">
+              <PropertyRef Name="DishId" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="DishId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RestaurantContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="DiningTables" EntityType="Self.DiningTable" />
+          <EntitySet Name="Dishs" EntityType="Self.Dish" />
+          <EntitySet Name="Orders" EntityType="Self.Order" />
+          <AssociationSet Name="FK_Orders_DiningTables" Association="Self.FK_Orders_DiningTables">
+            <End Role="DiningTables" EntitySet="DiningTables" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Dishs" Association="Self.FK_Orders_Dishs">
+            <End Role="Dishs" EntitySet="Dishs" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RestaurantModelStoreContainer" CdmEntityContainer="RestaurantContext">
+          <EntitySetMapping Name="DiningTables">
+            <EntityTypeMapping TypeName="RestaurantModel.DiningTable">
+              <MappingFragment StoreEntitySet="DiningTables">
+                <ScalarProperty Name="Reserved" ColumnName="Reserved" />
+                <ScalarProperty Name="TableNo" ColumnName="TableNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Dishs">
+            <EntityTypeMapping TypeName="RestaurantModel.Dish">
+              <MappingFragment StoreEntitySet="Dishs">
+                <ScalarProperty Name="DishId" ColumnName="DishId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="RestaurantModel.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="TableNo" ColumnName="TableNo" />
+                <ScalarProperty Name="DishId" ColumnName="DishId" />
+                <ScalarProperty Name="ReversedTime" ColumnName="ReversedTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

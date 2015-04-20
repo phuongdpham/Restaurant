@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="RestaurantModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="DiningTables">
+    <Key>
+      <PropertyRef Name="TableNo" />
+    </Key>
+    <Property Name="TableNo" Type="int" Nullable="false" />
+    <Property Name="Reserved" Type="char" MaxLength="1" />
+  </EntityType>
+  <EntityType Name="Dishs">
+    <Key>
+      <PropertyRef Name="DishId" />
+    </Key>
+    <Property Name="DishId" Type="int" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Price" Type="int" Nullable="false" />
+    <Property Name="Status" Type="tinyint" />
+  </EntityType>
+  <EntityType Name="Orders">
+    <Key>
+      <PropertyRef Name="TableNo" />
+      <PropertyRef Name="DishId" />
+      <PropertyRef Name="ReversedTime" />
+    </Key>
+    <Property Name="TableNo" Type="int" Nullable="false" />
+    <Property Name="DishId" Type="int" Nullable="false" />
+    <Property Name="ReversedTime" Type="datetime" Nullable="false" />
+    <Property Name="Quantity" Type="int" />
+  </EntityType>
+  <Association Name="FK_Orders_DiningTables">
+    <End Role="DiningTables" Type="Self.DiningTables" Multiplicity="1" />
+    <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DiningTables">
+        <PropertyRef Name="TableNo" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="TableNo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Orders_Dishs">
+    <End Role="Dishs" Type="Self.Dishs" Multiplicity="1" />
+    <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Dishs">
+        <PropertyRef Name="DishId" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="DishId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="RestaurantModelStoreContainer">
+    <EntitySet Name="DiningTables" EntityType="Self.DiningTables" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Dishs" EntityType="Self.Dishs" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Orders_DiningTables" Association="Self.FK_Orders_DiningTables">
+      <End Role="DiningTables" EntitySet="DiningTables" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Orders_Dishs" Association="Self.FK_Orders_Dishs">
+      <End Role="Dishs" EntitySet="Dishs" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
